@@ -1,0 +1,135 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-4a5b-bc6d-7e8f9a0b1c2d",
+		"name": "MsRenault.App (Local)",
+		"description": "Suite de testes para o Microserviço MsRenault.API.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Lead Webhook (Salesforce Events)",
+			"item": [
+				{
+					"name": "Status Update: NEGOTIATION",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"00Q0-SF-NEG-111\",\n    \"status\": \"NEGOTIATION\",\n    \"renaultLeadReferenceId\": \"REF-123456\",\n    \"firstName\": \"Ricardo\",\n    \"lastName\": \"Oliveira\",\n    \"email\": \"ricardo.oliveira@example.com\",\n    \"mobilePhone\": \"41988887777\",\n    \"modelOfInterest\": \"Duster 2024\",\n    \"interestType\": \"C\",\n    \"origin\": \"Showroom\",\n    \"leadSource\": \"Renault\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Lead/webhook/salesforce/event",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Lead",
+								"webhook",
+								"salesforce",
+								"event"
+							]
+						},
+						"description": "Simula um Lead que mudou para o status de NEGOTIATION no Salesforce. Isso deve disparar uma atualização de Funil na Renault."
+					},
+					"response": []
+				},
+				{
+					"name": "Status Update: PROSPECTION",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"00Q0-SF-PRO-222\",\n    \"status\": \"PROSPECTION\",\n    \"renaultLeadReferenceId\": \"REF-654321\",\n    \"firstName\": \"Maria\",\n    \"lastName\": \"Fernanda\",\n    \"email\": \"maria.f@example.com\",\n    \"mobilePhone\": \"11977776666\",\n    \"modelOfInterest\": \"Oroch Outsider\",\n    \"interestType\": \"C\",\n    \"origin\": \"Site Dealer\",\n    \"leadSource\": \"Renault\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Lead/webhook/salesforce/event",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Lead",
+								"webhook",
+								"salesforce",
+								"event"
+							]
+						},
+						"description": "Simula um Lead em fase de PROSPECÇÃO. Dispara atualização de funil e detalhes de prospecção na Renault."
+					},
+					"response": []
+				},
+				{
+					"name": "New Exclusive Lead (Phase 3)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"00Q0-SF-NEW-333\",\n    \"status\": \"NEW\",\n    \"renaultLeadReferenceId\": null,\n    \"firstName\": \"Carlos\",\n    \"lastName\": \"Eduardo\",\n    \"email\": \"carlos.edu@example.com\",\n    \"mobilePhone\": \"41966665555\",\n    \"modelOfInterest\": \"Megane E-Tech\",\n    \"interestType\": \"C\",\n    \"origin\": \"Direct Dealer\",\n    \"leadSource\": \"Salesforce\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Lead/webhook/salesforce/event",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Lead",
+								"webhook",
+								"salesforce",
+								"event"
+							]
+						},
+						"description": "Simula a criação de um lead diretamente no Salesforce (Sem RefId da Renault). Deve disparar a criação (Create) do lead na Renault."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5000",
+			"type": "string"
+		}
+	]
+}
