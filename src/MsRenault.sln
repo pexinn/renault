@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsRenault.Infra.Dados", "Ms
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsRenault.Infra.Mensageria", "MsRenault.Infra.Mensageria\MsRenault.Infra.Mensageria.csproj", "{6538D208-B02F-41BA-99D8-992137CBEFBA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsRenault.Tests.Unit", "MsRenault.Tests.Unit\MsRenault.Tests.Unit.csproj", "{D7564B8E-F3D7-49E2-8BDF-3FEC6C1EECF5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,18 @@ Global
 		{6538D208-B02F-41BA-99D8-992137CBEFBA}.Release|x64.Build.0 = Release|Any CPU
 		{6538D208-B02F-41BA-99D8-992137CBEFBA}.Release|x86.ActiveCfg = Release|Any CPU
 		{6538D208-B02F-41BA-99D8-992137CBEFBA}.Release|x86.Build.0 = Release|Any CPU
+		{D7564B8E-F3D7-49E2-8BDF-3FEC6C1EECF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7564B8E-F3D7-49E2-8BDF-3FEC6C1EECF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7564B8E-F3D7-49E2-8BDF-3FEC6C1EECF5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D7564B8E-F3D7-49E2-8BDF-3FEC6C1EECF5}.Debug|x64.Build.0 = Debug|Any CPU
+		{D7564B8E-F3D7-49E2-8BDF-3FEC6C1EECF5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D7564B8E-F3D7-49E2-8BDF-3FEC6C1EECF5}.Debug|x86.Build.0 = Debug|Any CPU
+		{D7564B8E-F3D7-49E2-8BDF-3FEC6C1EECF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7564B8E-F3D7-49E2-8BDF-3FEC6C1EECF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7564B8E-F3D7-49E2-8BDF-3FEC6C1EECF5}.Release|x64.ActiveCfg = Release|Any CPU
+		{D7564B8E-F3D7-49E2-8BDF-3FEC6C1EECF5}.Release|x64.Build.0 = Release|Any CPU
+		{D7564B8E-F3D7-49E2-8BDF-3FEC6C1EECF5}.Release|x86.ActiveCfg = Release|Any CPU
+		{D7564B8E-F3D7-49E2-8BDF-3FEC6C1EECF5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

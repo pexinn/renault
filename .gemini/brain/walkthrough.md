@@ -41,12 +41,20 @@ I have completed the implementation of the Renault Lead Integration microservice
 - Instrumentation for AspNetCore, HttpClient, MongoDB, and RabbitMQ.
 - Custom spans for workers and consumers.
 
+### 6. Unit Testing
+- New project `MsRenault.Tests.Unit` created.
+- **LeadMapperTests**: 3 tests for field mapping and UTC date formatting.
+- **RenaultAuthServiceTests**: 1 test validating token caching and renewal using mocked `HttpClient`.
+- **RenaultApiServiceTests**: 1 test validating request building and authorization headers.
+- Total of **5 tests** implemented and verified with 100% success rate.
+
 ## Documentation
 - `README.md` created with architecture overview, endpoint documentation, and setup instructions.
 - Swagger UI/OpenAPI document available at `/openapi/v1.json` (Development).
 
 ## Verification
 - **Build**: Successfully built the entire solution (`dotnet build MsRenault.sln`).
+- **Tests**: Ran all unit tests with success (`dotnet test MsRenault.sln`).
 - **Structure**: Verified project references and NuGet dependencies.
 - **Mapping**: Implemented `LeadMapper` with the required De/Para logic and UTC date formatting.
 

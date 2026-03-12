@@ -25,8 +25,9 @@ Setup the solution with a clean separation of concerns, following the patterns f
 #### [NEW] MsRenault.Infra.Dados
 - MongoDB implementation and raw storage logic.
 
-#### [NEW] MsRenault.Infra.Mensageria
-- RabbitMQ implementation for publishing and consuming leads.
+#### [NEW] MsRenault.Tests.Unit
+- Unit tests using xUnit, FluentAssertions, and Moq.
+- Tests for Mappers, Services, and Workers.
 
 ---
 
@@ -66,11 +67,17 @@ Setup the solution with a clean separation of concerns, following the patterns f
     - Request/Response payloads.
     - Setup instructions (MongoDB, RabbitMQ, Environment Variables).
 
+### [Component] Unit Testing
+- Create `MsRenault.Tests.Unit` project.
+- Implement tests for `LeadMapper` to ensure correct field translation and date formatting.
+- Implement tests for `RenaultAuthService` mocking `HttpClient` to verify token caching and renewal logic.
+- Implement tests for `RenaultApiService` to ensure correct request building.
+
 ## Verification Plan
 
 ### Automated Tests
-- **Unit Tests**: Test mappers (Renault -> Salesforce) to ensure field alignment.
-- **Integration Tests**: Mock Renault/Salesforce APIs to verify worker flow.
+- Run `dotnet test MsRenault.sln` to execute all unit tests.
+- Ensure 100% pass rate for mapping logic.
 
 ### Manual Verification
 1. Start RabbitMQ and MongoDB locally (Docker).

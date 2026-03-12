@@ -33,6 +33,11 @@
     - [x] Configure OpenTelemetry SDK from scratch (Traces, Metrics, OTLP)
     - [x] Add custom tags (`renault.bir`, `renault.leadReferenceId`)
     - [x] Verify full trace coverage
+- [x] Unit Testing
+    - [x] Create `MsRenault.Tests.Unit` project
+    - [x] Implement tests for `LeadMapper`
+    - [x] Implement tests for `RenaultAuthService`
+    - [x] Implement tests for `RenaultApiService` (mocking HttpClient)
 - [x] Project Documentation
     - [x] Create detailed `README.md` with API docs and setup
 - [x] Final Verification and Cleanup
