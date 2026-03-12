@@ -1,0 +1,40 @@
+# Task: Renault Lead Integration Microservice
+
+- [x] Project Setup and Architecture Planning
+    - [x] Create `task.md`
+    - [x] Create `implementation_plan.md`
+    - [x] Initialize .NET 10 Solution and Projects
+- [x] US01: Authentication and Token Management
+    - [x] Implement `RenaultAuthService` with OAuth 2.0
+    - [x] Implement Token caching and auto-renewal (90 days)
+    - [x] Add OpenTelemetry logging for auth failures
+- [x] US02 & US03: Ingestion Worker and Messaging
+    - [x] Implement `RenaultIngestionWorker` (Timed/Cron)
+    - [x] Implement Renault API client for `leads/consume`
+    - [x] Implement MongoDB repository for raw payload storage
+    - [x] Implement RabbitMQ publisher for `renault.leads.received`
+    - [x] Integrate OpenTelemetry Distributed Tracing context injection
+- [x] US04: Salesforce Integration Consumer
+    - [x] Implement RabbitMQ consumer for `renault.leads.received`
+    - [x] Implement Data Mapping (DTOs and Extension Methods)
+    - [x] Implement Salesforce API client
+    - [x] Implement DLQ logic for failed sends
+    - [x] Update MongoDB with Salesforce ID and Success status
+- [x] Phase 2: Journey Feedback (US06, US07, US08)
+    - [x] Implement Consumer for Salesforce events (RabbitMQ)
+    - [x] Implement Funnel updates (`/funnel`)
+    - [x] Implement Prospection updates (`/prospection`)
+    - [x] Implement Sales & Delivery updates (`/sales`, `/delivery`)
+- [x] Phase 3: Exclusive Leads (US09)
+    - [x] Implement Worker to identify non-Renault leads in Salesforce
+    - [x] Implement Lead Creation (`/create/:bircode`)
+    - [x] Sync `leadReferenceId` back to MongoDB and Salesforce
+- [x] US05: Instrumentação e Observabilidade com OpenTelemetry
+    - [x] Configure OpenTelemetry SDK from scratch (Traces, Metrics, OTLP)
+    - [x] Add custom tags (`renault.bir`, `renault.leadReferenceId`)
+    - [x] Verify full trace coverage
+- [x] Project Documentation
+    - [x] Create detailed `README.md` with API docs and setup
+- [x] Final Verification and Cleanup
+    - [x] Run unit tests (if applicable)
+    - [x] Create `walkthrough.md`
