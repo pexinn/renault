@@ -40,7 +40,9 @@
     - [x] Implement tests for `RenaultApiService` (mocking HttpClient)
 - [x] Project Documentation
     - [x] Create detailed `README.md` with API docs and setup
-    - [x] Create Postman Collection for testing
+    - [x] Consolidate Postman Collection for testing [/]
+- [x] Bug Fixes
+    - [x] Resolve `TypeLoadException` in `MsRenault.API`
 - [x] Final Verification and Cleanup
     - [x] Run unit tests (if applicable)
     - [x] Create `walkthrough.md`
