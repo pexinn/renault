@@ -1,6 +1,7 @@
-using MsRenault.API.Extensions;
+using Google.Cloud.SecretManager.V1;
 using MsRenault.Dominio.Interfaces;
 using MsRenault.Aplicacao.Servicos;
+using MsRenault.Aplicacao.Interfaces;
 using MsRenault.Infra.Dados.Services;
 using MsRenault.Infra.Dados.Repositories;
 using MsRenault.Infra.Mensageria.Services;
@@ -10,6 +11,12 @@ using Hangfire.Console;
 using Hangfire.InMemory;
 using MsRenault.API.Configuracoes;
 using Microsoft.Extensions.Options;
+using MsRenault.API.Extensions;
+using MsRenault.Aplicacao.Dtos;
+using MsRenault.Aplicacao.Utils;
+using System.IO;
+using System.Text;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +46,38 @@ builder.Services.AddScoped<ILeadRepository, LeadRepository>();
 builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
 builder.Services.AddSingleton<IRenaultServico, RenaultServico>();
 builder.Services.AddSingleton<IMessageProcessingService, MessageProcessingService>();
+
+// Secret Manager
+builder.Services.AddSingleton<ISecretManagerServiceClient, MsRenault.Aplicacao.Utils.SecretManagerServiceClientWrapper>();
+builder.Services.AddSingleton<ISecretManager, SecretManager>();
+builder.Services.AddSingleton(provider =>
+{
+    return SecretManagerServiceClient.Create();
+});
+
+// Load Secrets
+{
+    var projectId = builder.Configuration["ProjectID"];
+    var secretsSection = builder.Configuration.GetSection("Secrets");
+
+    if (!string.IsNullOrEmpty(projectId) && secretsSection.Exists())
+    {
+        var secretsList = new List<SecretsDTO>();
+        Microsoft.Extensions.Configuration.ConfigurationBinder.Bind(secretsSection, secretsList);
+
+        if (secretsList.Count > 0)
+        {
+            var client = SecretManagerServiceClient.Create();
+            var wrapper = new SecretManagerServiceClientWrapper(client);
+            var secretManager = new MsRenault.Aplicacao.Servicos.SecretManager(wrapper);
+
+            var appSettingsJson = secretManager.ObterAppSettingsDosSecrets(projectId!, secretsList);
+
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(appSettingsJson));
+            builder.Configuration.AddJsonStream(stream);
+        }
+    }
+}
 
 // Hangfire
 builder.Services.AddHangfire(config => config
