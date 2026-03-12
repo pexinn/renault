@@ -66,6 +66,19 @@ Recebe eventos de mudança de status ou criação de leads no Salesforce para si
 }
 ```
 
+## Testes e Validação
+### Testes Unitários
+Execute `dotnet test` na pasta `src` para rodar a suíte de testes unitários.
+
+### Postman
+O arquivo `MsRenault.postman_collection.json` na raiz do projeto contém chamadas prontas para:
+1. **Salesforce Webhook**: Testar o processamento interno do microserviço.
+2. **Renault API Direct**: Validar credenciais diretamente na montadora.
+
+Para usar:
+1. Importe o JSON no Postman.
+2. Configure a variável de ambiente `baseUrl` (padrão: `http://localhost:5000`).
+
 ## Observabilidade
 Exportação de traces OTLP habilitada por padrão.
 Endpoint OTLP: `http://localhost:4317`
