@@ -23,18 +23,22 @@ builder.Services.AddSingleton<IMongoClient>(sp =>
     return new MongoClient(connectionString);
 });
 
+// Configurações
+builder.Services.Configure<MsRenault.Aplicacao.Configuracao.FilasConfiguracao>(builder.Configuration.GetSection("Filas"));
+
 // Services
 builder.Services.AddSingleton<IRenaultAuthService, RenaultAuthService>();
 builder.Services.AddHttpClient<IRenaultApiService, RenaultApiService>();
 builder.Services.AddHttpClient<ISalesforceApiService, SalesforceApiService>();
 
 builder.Services.AddScoped<ILeadRepository, LeadRepository>();
-builder.Services.AddScoped<IRabbitMqService, RabbitMqService>();
+builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
+builder.Services.AddSingleton<IRenaultServico, RenaultServico>();
+builder.Services.AddSingleton<IMessageProcessingService, MessageProcessingService>();
 
 // Workers
 builder.Services.AddHostedService<RenaultIngestionWorker>();
-builder.Services.AddHostedService<RabbitMqLeadConsumer>();
-builder.Services.AddHostedService<RabbitMqFeedbackConsumer>();
+builder.Services.AddHostedService<MsRenault.Aplicacao.Hospedagem.MensageriaHosted>();
 
 var app = builder.Build();
 

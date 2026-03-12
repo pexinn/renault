@@ -1,7 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\MsRenault.Dominio\MsRenault.Dominio.csproj" />
+    <ProjectReference Include="..\MsRenault.Infra.Mensageria\MsRenault.Infra.Mensageria.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

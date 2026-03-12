@@ -52,41 +52,12 @@ public class RenaultIngestionWorker : BackgroundService
     private async Task ProcessIngestionAsync(string bir, CancellationToken ct)
     {
         using var scope = _serviceProvider.CreateScope();
-        var apiService = scope.ServiceProvider.GetRequiredService<IRenaultApiService>();
-        var repository = scope.ServiceProvider.GetRequiredService<ILeadRepository>();
-        var rabbitMq = scope.ServiceProvider.GetRequiredService<IRabbitMqService>();
+        var renaultServico = scope.ServiceProvider.GetRequiredService<IRenaultServico>();
 
-        // Renault requirement: max 2 days range.
-        var endDate = DateTime.UtcNow;
-        var startDate = endDate.AddDays(-2);
+        _logger.LogInformation("Renault Ingestion Cycle started for BIR {Bir}", bir);
 
-        _logger.LogInformation("Consuming leads from {Start} to {End}", startDate, endDate);
-
-        var response = await apiService.ConsumeLeadsAsync(bir, startDate, endDate, ct);
-
-        if (response.Data.Count == 0)
-        {
-            _logger.LogInformation("No new leads found for BIR {Bir}", bir);
-            return;
-        }
-
-        foreach (var lead in response.Data)
-        {
-            // US02: Save raw payload to MongoDB
-            var rawLead = new RawRenaultLead
-            {
-                LeadReferenceId = lead.LeadReferenceId,
-                Bir = bir,
-                RawJson = JsonSerializer.Serialize(lead),
-                Status = "Received"
-            };
-
-            await repository.CreateAsync(rawLead, ct);
-
-            // US03: Publish to RabbitMQ
-            await rabbitMq.PublishLeadAsync("renault.leads.received", lead, lead.LeadReferenceId, ct);
-            
-            _logger.LogInformation("Lead {LeadId} processed and published", lead.LeadReferenceId);
-        }
+        await renaultServico.ObterLeads();
+        
+        _logger.LogInformation("Renault Ingestion Cycle completed for BIR {Bir}", bir);
     }
 }

@@ -1,8 +1,13 @@
+using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 using MsRenault.Dominio.Interfaces;
 using System.Diagnostics;
 using OpenTelemetry.Context.Propagation;
@@ -49,7 +54,6 @@ public class RabbitMqService : IRabbitMqService
             Headers = new Dictionary<string, object?>()
         };
 
-        // OpenTelemetry Context Injection
         var context = activity?.Context ?? Activity.Current?.Context ?? default;
         _propagator.Inject(new PropagationContext(context, Baggage.Current), props.Headers, (headers, key, value) =>
         {
@@ -65,5 +69,41 @@ public class RabbitMqService : IRabbitMqService
             cancellationToken: ct);
 
         _logger.LogInformation("Message published to {Queue} with CorrelationId {CorrelationId}", queueName, correlationId);
+    }
+
+    public async Task ConsumirMensagens(Func<string, Task> processarMensagem, string fila, string vhost = "")
+    {
+        var factory = new ConnectionFactory
+        {
+            HostName = _configuration["RabbitMQ:HostName"] ?? "localhost",
+            UserName = _configuration["RabbitMQ:UserName"] ?? "guest",
+            Password = _configuration["RabbitMQ:Password"] ?? "guest"
+        };
+
+        if (!string.IsNullOrEmpty(vhost)) factory.VirtualHost = vhost;
+
+        var connection = await factory.CreateConnectionAsync();
+        var channel = await connection.CreateChannelAsync();
+
+        await channel.QueueDeclareAsync(fila, durable: true, exclusive: false, autoDelete: false);
+
+        var consumer = new AsyncEventingBasicConsumer(channel);
+        consumer.ReceivedAsync += async (model, ea) =>
+        {
+            try
+            {
+                var body = ea.Body.ToArray();
+                var mensagem = Encoding.UTF8.GetString(body);
+                await processarMensagem(mensagem);
+                await channel.BasicAckAsync(ea.DeliveryTag, false);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao processar mensagem da fila {Fila}", fila);
+                await channel.BasicNackAsync(ea.DeliveryTag, false, true);
+            }
+        };
+
+        await channel.BasicConsumeAsync(fila, autoAck: false, consumer: consumer);
     }
 }
