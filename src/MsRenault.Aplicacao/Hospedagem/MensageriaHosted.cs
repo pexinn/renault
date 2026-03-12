@@ -4,7 +4,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using MsRenault.Aplicacao.Configuracao;
 using MsRenault.Dominio.Interfaces;
-using MsRenault.Infra.Mensageria.Services;
 
 namespace MsRenault.Aplicacao.Hospedagem;
 

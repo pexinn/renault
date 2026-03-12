@@ -1,11 +1,15 @@
 using MsRenault.API.Extensions;
-using MsRenault.API.Workers;
-using MsRenault.API.Consumers;
 using MsRenault.Dominio.Interfaces;
+using MsRenault.Aplicacao.Servicos;
 using MsRenault.Infra.Dados.Services;
 using MsRenault.Infra.Dados.Repositories;
 using MsRenault.Infra.Mensageria.Services;
 using MongoDB.Driver;
+using Hangfire;
+using Hangfire.Console;
+using Hangfire.InMemory;
+using MsRenault.API.Configuracoes;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,8 +40,18 @@ builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
 builder.Services.AddSingleton<IRenaultServico, RenaultServico>();
 builder.Services.AddSingleton<IMessageProcessingService, MessageProcessingService>();
 
+// Hangfire
+builder.Services.AddHangfire(config => config
+    .UseConsole()
+    .UseInMemoryStorage()
+);
+
+builder.Services.AddHangfireServer(options =>
+{
+    options.WorkerCount = 1;
+});
+
 // Workers
-builder.Services.AddHostedService<RenaultIngestionWorker>();
 builder.Services.AddHostedService<MsRenault.Aplicacao.Hospedagem.MensageriaHosted>();
 
 var app = builder.Build();
@@ -50,6 +64,21 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
+
+// Hangfire Dashboard
+app.UseHangfireDashboard("/hangfire", new DashboardOptions 
+{ 
+    Authorization = new[] { new AutorizacaoHangfire() },
+    DashboardTitle = "MsRenault"
+});
+
+// Recurring Jobs
+RecurringJob.AddOrUpdate<IRenaultServico>(
+    "Obter leads renault",
+    x => x.ObterLeads(),
+    builder.Configuration["Hangfire:Cron"] ?? "*/10 * * * *"
+);
+
 app.MapControllers();
 
 app.Run();

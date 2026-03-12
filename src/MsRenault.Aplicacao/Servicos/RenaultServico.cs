@@ -3,6 +3,7 @@ using MsRenault.Dominio.Dtos;
 using MsRenault.Dominio.Interfaces;
 using MsRenault.Dominio.DTOs.Renault;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace MsRenault.Aplicacao.Servicos;
